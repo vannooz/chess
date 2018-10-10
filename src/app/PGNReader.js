@@ -5,7 +5,6 @@ import LichessIterator from './LichessIterator';
 
 export default class PGNReader {
     parsePGN(playerName, notify) {
-        console.log("loading", playerName)
         new LichessIterator(playerName, (result) => {
             if(!result || !result.length) {
                 return
@@ -23,8 +22,7 @@ export default class PGNReader {
             return
         }
         var pgn = pgnArray[index]
-        console.log("parsing", pgn)
-        let playerColor = (pgn.headers.White === playerName) ? "w" : "b"
+        let playerColor = (pgn.headers.White.toLowerCase() === playerName.toLowerCase()) ? "w" : "b"
         let chess = new Chess()
         pgn.moves.forEach(element => {
             let fen = chess.fen()
@@ -36,7 +34,6 @@ export default class PGNReader {
             }
         })
         setTimeout(()=>{this.parsePGNTimed(pgnArray, index+1, playerName, notify)},1)
-        console.log("queued")
         notify(1, openingGraph)
     }
 }
